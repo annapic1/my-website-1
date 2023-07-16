@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Video from "./video.MOV";
 import NavBar from './NavBar';
 
@@ -20,51 +20,45 @@ const videoStyle = {
 const textContainerStyle = {
   color: 'white',
   position: 'absolute',
-  top: "37%",
+  top: '30%',
+  
   display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
   width: '100%',
   fontSize: '24px',
   fontWeight: 'normal',
+  textAlign: 'center',
 };
 
 const textContent = [
   'Hello!',
   'My name is Anna.',
   'Welcome to my website.',
-
 ];
 
 export default function Home() {
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const [currentText, setCurrentText] = useState('');
+  const [currentLine, setCurrentLine] = useState(0);
 
   useEffect(() => {
-    const currentWord = textContent[currentTextIndex];
+    const timeout = setTimeout(() => {
+      setCurrentLine((prevLine) => (prevLine + 1) % textContent.length);
+    }, 4000);
 
-    if (currentText.length < currentWord.length) {
-      const typingTimeout = setTimeout(() => {
-        setCurrentText((prevText) => prevText + currentWord[currentText.length]);
-      }, 100);
-
-      return () => clearTimeout(typingTimeout);
-    } else if (currentTextIndex < textContent.length - 1) {
-      const switchTimeout = setTimeout(() => {
-        setCurrentTextIndex((prevIndex) => prevIndex + 1);
-        setCurrentText('');
-      }, 1000);
-
-      return () => clearTimeout(switchTimeout);
-    }
-  }, [currentText, currentTextIndex]);
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <div style={parentContainerStyle}>
       <NavBar isHomePage={true} />
       <video src={Video} autoPlay={true} muted={true} playsInline={true} loop={true} style={videoStyle}></video>
       <div style={textContainerStyle}>
-        <div>{currentText}</div>
+        {textContent.map((line, index) => (
+          <div key={index}>
+            {index === currentLine ? line : ''}
+          </div>
+        ))}
       </div>
     </div>
   );
