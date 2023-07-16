@@ -1,9 +1,13 @@
 import React from 'react';
+import NavBar from './NavBar';
 
 
 export default function About() {
   return (
-    <div>hello this is the about page</div>
+    <div>
+      <NavBar isHomePage={false} />
+      
+      hello this is the about page</div>
   );
 }
 
